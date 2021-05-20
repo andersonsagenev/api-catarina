@@ -6,6 +6,8 @@ import routes  from './routes';
 import path from 'path';
 import cors from 'cors';
 
+const DB_URL= process.env.MONGO_URL
+
 class App{
 
     public server: express.Application

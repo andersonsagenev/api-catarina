@@ -1,15 +1,10 @@
-// import express from 'express';
 import * as dotenv from 'dotenv';
 import  app  from './app';
 
-// const app = express();
 dotenv.config();
 
-app.get('/', (req, res) => {
-    return res.json({ message: "hello word"});
+const port = process.env.PORT || 3333
 
-});
-
-app.listen(3333,() => 
-console.log("Server is running..."));
+app.listen(port,() => 
+console.log("Server is running...", port));
 

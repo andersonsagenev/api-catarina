@@ -3,9 +3,9 @@ import multer from 'multer';
 import uploadConfig from './config/upload';
 import auth from './middlewares/auth';
 
-import ProductController from '@controllers/ProductController';
-import UsersController  from "@controllers/UsersController";
-import AuthController from '@controllers/AuthController';
+import ProductController from './controllers/ProductController';
+import UsersController  from "./controllers/UsersController";
+import AuthController from './controllers/AuthController';
 
 const routes = Router();
 const upload = multer(uploadConfig);

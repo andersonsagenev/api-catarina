@@ -15,7 +15,7 @@ import mailer from '../../src/modules/mailer';
 import * as Yup from 'yup';
 import Mailer from '../modules/mailer';
 
-import User from '@models/User';
+import User from '../models/User';
 
 
 function generationToken(params = {}) {

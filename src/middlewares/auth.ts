@@ -2,7 +2,7 @@ import { IUserInterface } from './../interfaces/UserInterface';
 import { Response, Request } from 'express';
 import jwt from 'jsonwebtoken';
 import authConfig from '../config/auth.json';
-import User from '@models/User';
+import User from '../models/User';
 
 class AuthMiddleware {
 

@@ -6,7 +6,7 @@ show: Quando queremos listar uma unica sessao
 update: quando queremos alterar alguma sessao
 destroy: quando queremos deletar uma sessao
 */
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
@@ -18,6 +18,7 @@ import Mailer from '../modules/mailer';
 import User from '../models/User';
 
 
+
 function generationToken(params = {}) {
     return jwt.sign(params, authConfig.secret, {
         expiresIn: 86400,
@@ -26,18 +27,21 @@ function generationToken(params = {}) {
 
 class AuthController {
 
-    async authenticate(req: Request, res: Response) {
+    async authenticate(req: Request, res: Response, next: NextFunction ){
 
        const schema = Yup.object().shape({
            email: Yup.string().email("Informe o email").required(),
            password: Yup.string().min(6, "Informe uma senha de 6 dígitos").max(10).required()
        })
 
-       if (!(await schema.isValid(req.body))){
-        return res.status(400).send({ error: 'Email required' })
-        }
-
         const { email, password } = req.body;
+
+        try {
+            await schema.isValid(req.body);
+            next();
+        } catch (error) {
+            return res.status(400).json({ error })
+        }
 
         const user = await User.findOne({ email }).select('+password');
         if (!user)

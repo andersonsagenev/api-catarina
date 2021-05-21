@@ -29,16 +29,15 @@ class AuthController {
     async authenticate(req: Request, res: Response) {
 
        const schema = Yup.object().shape({
-           email: Yup.string().email().required(),
-           password: Yup.string()
+           email: Yup.string().email("Informe o email").required(),
+           password: Yup.string().min(6, "Informe uma senha de 6 dígitos").max(10).required()
        })
 
-        const { email, password } = req.body;
-
-        if (!(await schema.isValid(req.body))){
-            return res.status(400).send({ error: 'Email required' })
+       if (!(await schema.isValid(req.body))){
+        return res.status(400).send({ error: 'Email required' })
         }
 
+        const { email, password } = req.body;
 
         const user = await User.findOne({ email }).select('+password');
         if (!user)

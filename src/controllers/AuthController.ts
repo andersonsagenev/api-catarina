@@ -31,7 +31,7 @@ class AuthController {
 
        const schema = Yup.object().shape({
            email: Yup.string().email().required(),
-           password: Yup.string().min(6, "Informe uma senha de 6 dígitos").max(10).required()
+           password: Yup.string().required()
        })
 
         const { email, password } = req.body;

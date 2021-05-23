@@ -27,10 +27,10 @@ function generationToken(params = {}) {
 
 class AuthController {
 
-    async authenticate(req: Request, res: Response, next: NextFunction ){
+    async authenticate(req: Request, res: Response ){
 
        const schema = Yup.object().shape({
-           email: Yup.string().email("Informe o email").required(),
+           email: Yup.string().email().required(),
            password: Yup.string().min(6, "Informe uma senha de 6 dígitos").max(10).required()
        })
 

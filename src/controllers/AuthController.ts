@@ -36,32 +36,27 @@ class AuthController {
 
         const { email, password } = req.body;
 
-        try {
-            await schema.isValid(req.body);
-            next();
-
-            const user = await User.findOne({ email }).select('+password');
-            if (!user)
-                return res.status(400).send({ error: 'User not found' });
-    
-            if (!await bcrypt.compare(password, user.password))
-                return res.status(400).send({ error: 'Invalid password' })
-    
-            user.password = undefined;
-    
-            const token = jwt.sign({ id: user.id }, authConfig.secret, {
-                expiresIn: 86400,
-            });
-    
-            res.send({
-                user,
-                token: generationToken({ id: user.id })
-            });
-
-        } catch (error) {
-            return res.status(400).json({ error })
+        if (!(await schema.isValid(req.body))){
+            return res.status(400).send({ error: 'Email required' })
         }
-       
+
+        const user = await User.findOne({ email }).select('+password');
+        if (!user)
+            return res.status(400).send({ error: 'User not found' });
+
+        if (!await bcrypt.compare(password, user.password))
+            return res.status(400).send({ error: 'Invalid password' })
+
+        user.password = undefined;
+
+        const token = jwt.sign({ id: user.id }, authConfig.secret, {
+            expiresIn: 86400,
+        });
+
+        res.send({
+            user,
+            token: generationToken({ id: user.id })
+        });
     }
 
     async store(req: Request, res: Response) {

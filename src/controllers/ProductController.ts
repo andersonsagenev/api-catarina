@@ -8,6 +8,8 @@ class ProductController{
     const { name, description, price, location, status } = req.body;
     const { user_id } = req.headers;
 
+    console.log(user_id)
+
     const product = await Product.create({
       user: user_id,
       thumbnail: filename,
@@ -20,6 +22,15 @@ class ProductController{
 
     return res.json(product);
   }
+
+  async index(request: Request, response: Response) {
+
+   // const messagesService = new MessagesService();
+
+    const list = await Product.find();
+
+    return response.json(list);
+}
 
 }
 

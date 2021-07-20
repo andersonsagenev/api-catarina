@@ -7,7 +7,7 @@ update: quando queremos alterar alguma sessao
 destroy: quando queremos deletar uma sessao
 */
 import { NextFunction, Request, Response } from 'express';
-import bcrypt from 'bcryptjs';
+import bcrypt, { compare } from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import authConfig from '../../src/config/auth.json';
@@ -17,7 +17,10 @@ import Mailer from '../modules/mailer';
 
 import User from '../models/User';
 
-
+interface IAuthenticateRequest {
+    email: string;
+    password: string;
+}
 
 function generationToken(params = {}) {
     return jwt.sign(params, authConfig.secret, {
@@ -27,20 +30,23 @@ function generationToken(params = {}) {
 
 class AuthController {
 
-    async authenticate(req: Request, res: Response ){
+    async authenticate(req: Request, res: Response ) {
 
-       const schema = Yup.object().shape({
-           email: Yup.string().email().required(),
-           password: Yup.string().required()
-       })
+    //    const schema = Yup.object().shape({
+    //        email: Yup.string().email().required(),
+    //        password: Yup.string().required()
+    //    })
 
         const { email, password } = req.body;
 
-        if (!(await schema.isValid(req.body))){
-            return res.status(400).send({ error: 'Email required' })
-        }
+       console.log(req.body)
+
+        // if (!(await schema.isValid(req.body))){
+        //     return res.status(400).send({ error: 'Email required' })
+        // }
 
         const user = await User.findOne({ email }).select('+password');
+        
         if (!user)
             return res.status(400).send({ error: 'User not found' });
 

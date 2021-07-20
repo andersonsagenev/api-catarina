@@ -16,6 +16,7 @@ const upload = multer(uploadConfig);
  routes.post('/product', auth.authorizationByToken, upload.single('thumbnail'), ProductController.store);
 
   routes.get('/users', auth.authorizationByToken, UsersController.index);
+  routes.get('/products', auth.authorizationByToken, ProductController.index);
   routes.post('/register', AuthController.store);
 
 export default routes;
